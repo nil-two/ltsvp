@@ -11,9 +11,13 @@ $ ltsvp OPTION... [FILE]...
 
 Options:
   -k, --keys=LIST          select only these keys
+                           LIST is made up of keys separated by commas
+                             host           # Select host
+                             host,time,ua   # Select host, time, and ua
+  -d, --delimiter=STRING   use STRING to separate parts (default: \t)
   -r, --remain-ltsv        print selected parts as LTSV
-      --help               display this help text and exit
-      --version            display version information and exit
+  -h, --help               display this help text and exit
+  -v, --version            display version information and exit
 ```
 
 License
