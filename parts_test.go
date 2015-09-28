@@ -23,6 +23,15 @@ var ParseKeysListTests = []struct {
 	{`host,`, []string{`host`, ``}},
 	{`host,,`, []string{`host`, ``, ``}},
 	{`,,host,,status,,`, []string{``, ``, `host`, ``, `status`, ``, ``}},
+
+	// include escaped comma
+	{`a\,b`, []string{`a,b`}},
+	{`a\,\,b`, []string{`a,,b`}},
+	{`a\,,b\,`, []string{`a,`, `b,`}},
+	{`\,a,\,b`, []string{`,a`, `,b`}},
+	{`\,a\,,\,b\,`, []string{`,a,`, `,b,`}},
+	{`a\,b,c\,d\,e`, []string{`a,b`, `c,d,e`}},
+	{`a\,b,c\,d\,e,f\,g\,h\,i`, []string{`a,b`, `c,d,e`, `f,g,h,i`}},
 }
 
 func TestParseKeysList(t *testing.T) {
