@@ -75,10 +75,17 @@ func printErr(err error) {
 	fmt.Fprintln(os.Stderr, "ltsvp:", err)
 }
 
+func guideToHelp() {
+	os.Stderr.WriteString(`
+Try 'ltsvp --help' for more information.
+`[1:])
+}
+
 func _main() int {
 	opt, err := parseOption(os.Args[1:])
 	if err != nil {
 		printErr(err)
+		guideToHelp()
 		return 2
 	}
 	switch {
@@ -93,6 +100,7 @@ func _main() int {
 	l, err := newLTSVScannerFromOption(opt)
 	if err != nil {
 		printErr(err)
+		guideToHelp()
 		return 2
 	}
 	if err := do(l); err != nil {
