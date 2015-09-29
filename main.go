@@ -32,7 +32,7 @@ v0.1.0
 }
 
 type Option struct {
-	List       string `short:"k" long:"keys"`
+	List       string `short:"k" long:"keys" required:"true"`
 	Delimiter  string `short:"d" long:"delimiter" default:"\t"`
 	RemainLTSV bool   `short:"r" long:"remain-ltsv"`
 	IsHelp     bool   `short:"h" long:"help"`
