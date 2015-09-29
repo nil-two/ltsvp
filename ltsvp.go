@@ -32,3 +32,23 @@ func NewLTSVScanner(keys []string, r io.Reader) *LTSVScanner {
 		reader: goltsv.NewReader(r),
 	}
 }
+
+func (l *LTSVScanner) Scan() bool {
+	if l.err != nil {
+		return false
+	}
+
+	recode, err := l.reader.Read()
+	if err != nil {
+		l.err = err
+		return false
+	}
+
+	var values []string
+	for _, key := range l.keys {
+		values = append(values, recode[key])
+	}
+	l.line = strings.Join(values, "\t")
+
+	return true
+}
