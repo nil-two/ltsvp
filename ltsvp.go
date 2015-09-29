@@ -1,9 +1,11 @@
 package main
 
 import (
-	"github.com/ymotongpoo/goltsv"
+	"io"
 	"regexp"
 	"strings"
+
+	"github.com/ymotongpoo/goltsv"
 )
 
 var KEYS_LIST = regexp.MustCompile(`(?:[^,\\]|\\.)*`)
@@ -22,4 +24,11 @@ type LTSVScanner struct {
 	line   string
 	err    error
 	reader *goltsv.LTSVReader
+}
+
+func NewLTSVScanner(keys []string, r io.Reader) *LTSVScanner {
+	return &LTSVScanner{
+		keys:   keys,
+		reader: goltsv.NewReader(r),
+	}
 }
