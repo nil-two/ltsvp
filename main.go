@@ -40,7 +40,10 @@ func newLTSVScannerFromOption(opt *Option) (l *LTSVScanner, err error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewLTSVScanner(keys, reader), nil
+
+	l = NewLTSVScanner(keys, reader)
+	l.Delimiter = opt.Delimiter
+	return l, nil
 }
 
 func do(l *LTSVScanner) error {
