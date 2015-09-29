@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/ymotongpoo/goltsv"
 	"regexp"
 	"strings"
 )
@@ -14,4 +15,11 @@ func ParseKeysList(list string) []string {
 		keys[i] = strings.Replace(keys[i], `\\`, `\`, -1)
 	}
 	return keys
+}
+
+type LTSVScanner struct {
+	keys   []string
+	line   string
+	err    error
+	reader *goltsv.LTSVReader
 }
