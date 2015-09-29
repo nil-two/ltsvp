@@ -86,3 +86,21 @@ host:172.16.0.12	status:404
 		}
 	}
 }
+
+func TestScanError(t *testing.T) {
+	keys := []string{"host"}
+	reader := strings.NewReader(`
+host:192.168.0.1	status:200
+a	b	c
+host:172.16.0.12	status:404
+`[1:])
+	l := NewLTSVScanner(keys, reader)
+	expects := []bool{true, false, false}
+	for i := 0; i < len(expects); i++ {
+		expect := expects[i]
+		actual := l.Scan()
+		if actual != expect {
+			t.Errorf("Scan[%v]: got %v, want %v", i, actual, expect)
+		}
+	}
+}
