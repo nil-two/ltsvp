@@ -1,7 +1,9 @@
 package main
 
 import (
+	"github.com/ymotongpoo/goltsv"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -51,5 +53,19 @@ func TestParseKeysList(t *testing.T) {
 			t.Errorf("ParseKeysList(%q) = %q, want %q",
 				test.list, actual, expect)
 		}
+	}
+}
+
+func TestNewLTSVScanner(t *testing.T) {
+	keys := []string{"host", "time"}
+	reader := strings.NewReader(``)
+	expect := &LTSVScanner{
+		keys:   keys,
+		reader: goltsv.NewReader(reader),
+	}
+	actual := NewLTSVScanner(keys, reader)
+	if !reflect.DeepEqual(actual, expect) {
+		t.Errorf("NewLTSVScanner(%q, %q) = %q, want %q",
+			keys, reader, actual, expect)
 	}
 }
