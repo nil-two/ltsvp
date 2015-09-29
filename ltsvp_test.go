@@ -61,8 +61,9 @@ func TestNewLTSVScanner(t *testing.T) {
 	reader := strings.NewReader(``)
 
 	expect := &LTSVScanner{
-		keys:   keys,
-		reader: goltsv.NewReader(reader),
+		Delimiter: "\t",
+		keys:      keys,
+		reader:    goltsv.NewReader(reader),
 	}
 	actual := NewLTSVScanner(keys, reader)
 	if !reflect.DeepEqual(actual, expect) {
@@ -130,39 +131,42 @@ host:172.16.0.12	status:404
 	}
 }
 
-var MultipleKeysTests = []struct {
-	keys []string
-	src  string
-	dst  []string
+var DelimiterTests = []struct {
+	keys      []string
+	delimiter string
+	src       string
+	dst       []string
 }{
 	{
-		keys: []string{"host"},
+		keys:      []string{"host", "status"},
+		delimiter: ",",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
 `[1:],
 		dst: []string{
-			"192.168.0.1",
-			"172.16.0.12",
+			"192.168.0.1,200",
+			"172.16.0.12,404",
 		},
 	},
 	{
-		keys: []string{"host", "status"},
+		keys:      []string{"host", "status"},
+		delimiter: "--",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
 `[1:],
 		dst: []string{
-			"192.168.0.1\t200",
-			"172.16.0.12\t404",
+			"192.168.0.1--200",
+			"172.16.0.12--404",
 		},
 	},
 }
 
-func TestMultipleKeys(t *testing.T) {
-	for _, test := range MultipleKeysTests {
-		l := NewLTSVScanner(test.keys,
-			strings.NewReader(test.src))
+func TestDelimiter(t *testing.T) {
+	for _, test := range DelimiterTests {
+		l := NewLTSVScanner(test.keys, strings.NewReader(test.src))
+		l.Delimiter = test.delimiter
 
 		expect := test.dst
 		actual := []string{}
@@ -170,8 +174,8 @@ func TestMultipleKeys(t *testing.T) {
 			actual = append(actual, l.Text())
 		}
 		if !reflect.DeepEqual(actual, expect) {
-			t.Errorf("(keys: %q) got %q, want %q",
-				test.keys, actual, expect)
+			t.Errorf("(keys: %q, delimiter: %q) got %q, want %q",
+				test.keys, test.delimiter, actual, expect)
 		}
 	}
 }
