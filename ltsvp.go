@@ -53,6 +53,13 @@ func (l *LTSVScanner) Scan() bool {
 	return true
 }
 
+func (l *LTSVScanner) Err() error {
+	if l.err == io.EOF {
+		return nil
+	}
+	return l.err
+}
+
 func (l *LTSVScanner) Text() string {
 	return l.line
 }
