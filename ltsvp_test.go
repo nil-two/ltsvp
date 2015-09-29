@@ -59,6 +59,7 @@ func TestParseKeysList(t *testing.T) {
 func TestNewLTSVScanner(t *testing.T) {
 	keys := []string{"host", "time"}
 	reader := strings.NewReader(``)
+
 	expect := &LTSVScanner{
 		keys:   keys,
 		reader: goltsv.NewReader(reader),
@@ -83,6 +84,7 @@ host:192.168.0.1	status:200
 host:172.16.0.12	status:404
 `[1:])
 	l := NewLTSVScanner(keys, reader)
+
 	expects := []ScanResult{
 		{scan: true, text: "192.168.0.1", err: nil},
 		{scan: true, text: "172.16.0.12", err: nil},
@@ -109,6 +111,7 @@ a	b	c
 host:172.16.0.12	status:404
 `[1:])
 	l := NewLTSVScanner(keys, reader)
+
 	expects := []ScanResult{
 		{scan: true, text: "192.168.0.1", err: nil},
 		{scan: false, text: "", err: goltsv.ErrLabelName},
