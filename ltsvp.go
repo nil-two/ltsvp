@@ -23,7 +23,7 @@ type LTSVScanner struct {
 	Delimiter  string
 	RemainLTSV bool
 	keys       []string
-	line       string
+	text       string
 	err        error
 	reader     *goltsv.LTSVReader
 }
@@ -44,7 +44,7 @@ func (l *LTSVScanner) Scan() bool {
 	recode, err := l.reader.Read()
 	if err != nil {
 		l.err = err
-		l.line = ""
+		l.text = ""
 		return false
 	}
 
@@ -57,13 +57,13 @@ func (l *LTSVScanner) Scan() bool {
 				fields = append(fields, field)
 			}
 		}
-		l.line = strings.Join(fields, "\t")
+		l.text = strings.Join(fields, "\t")
 	default:
 		var values []string
 		for _, key := range l.keys {
 			values = append(values, recode[key])
 		}
-		l.line = strings.Join(values, l.Delimiter)
+		l.text = strings.Join(values, l.Delimiter)
 	}
 
 	return true
@@ -77,5 +77,5 @@ func (l *LTSVScanner) Err() error {
 }
 
 func (l *LTSVScanner) Text() string {
-	return l.line
+	return l.text
 }

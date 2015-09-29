@@ -31,10 +31,6 @@ v0.1.0
 `[1:])
 }
 
-func printErr(err error) {
-	fmt.Fprintln(os.Stderr, "ltsvp:", err)
-}
-
 type Option struct {
 	List       string `short:"k" long:"keys"`
 	Delimiter  string `short:"d" long:"delimiter" default:"\t"`
@@ -44,16 +40,14 @@ type Option struct {
 	Files      []string
 }
 
-func ParseOption(args []string) (opt *Option, err error) {
+func parseOption(args []string) (opt *Option, err error) {
 	opt = &Option{}
-	f := flags.NewParser(opt, flags.PassDoubleDash)
+	flag := flags.NewParser(opt, flags.PassDoubleDash)
 
-	files, err := f.ParseArgs(args)
+	opt.Files, err = flag.ParseArgs(args)
 	if err != nil {
 		return nil, err
 	}
-	opt.Files = files
-
 	return opt, nil
 }
 
@@ -77,8 +71,12 @@ func do(l *LTSVScanner) error {
 	return l.Err()
 }
 
+func printErr(err error) {
+	fmt.Fprintln(os.Stderr, "ltsvp:", err)
+}
+
 func _main() int {
-	opt, err := ParseOption(os.Args[1:])
+	opt, err := parseOption(os.Args[1:])
 	if err != nil {
 		printErr(err)
 		return 2
