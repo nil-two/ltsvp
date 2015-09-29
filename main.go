@@ -1,11 +1,10 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 
+	"github.com/jessevdk/go-flags"
 	"github.com/yuya-takeyama/argf"
 )
 
@@ -37,34 +36,24 @@ func printErr(err error) {
 }
 
 type Option struct {
-	List       string
-	Delimiter  string
-	RemainLTSV bool
-	IsHelp     bool
-	IsVersion  bool
+	List       string `short:"k" long:"keys"`
+	Delimiter  string `short:"d" long:"delimiter" default:"\t"`
+	RemainLTSV bool   `short:"r" long:"remain-ltsv"`
+	IsHelp     bool   `short:"h" long:"help"`
+	IsVersion  bool   `short:"v" long:"version"`
 	Files      []string
 }
 
 func ParseOption(args []string) (opt *Option, err error) {
-	f := flag.NewFlagSet("ltsvp", flag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
-
 	opt = &Option{}
-	f.StringVar(&opt.List, "k", "", "")
-	f.StringVar(&opt.List, "keys", "", "")
-	f.StringVar(&opt.Delimiter, "d", "\t", "")
-	f.StringVar(&opt.Delimiter, "delimiter", "\t", "")
-	f.BoolVar(&opt.RemainLTSV, "r", false, "")
-	f.BoolVar(&opt.RemainLTSV, "remain-ltsv", false, "")
-	f.BoolVar(&opt.IsHelp, "h", false, "")
-	f.BoolVar(&opt.IsHelp, "help", false, "")
-	f.BoolVar(&opt.IsVersion, "v", false, "")
-	f.BoolVar(&opt.IsVersion, "version", false, "")
+	f := flags.NewParser(opt, flags.PassDoubleDash)
 
-	if err := f.Parse(args); err != nil {
+	files, err := f.ParseArgs(args)
+	if err != nil {
 		return nil, err
 	}
-	opt.Files = f.Args()
+	opt.Files = files
+
 	return opt, nil
 }
 
