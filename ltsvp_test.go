@@ -129,3 +129,49 @@ host:172.16.0.12	status:404
 		}
 	}
 }
+
+var MultipleKeysTests = []struct {
+	keys []string
+	src  string
+	dst  []string
+}{
+	{
+		keys: []string{"host"},
+		src: `
+host:192.168.0.1	status:200
+host:172.16.0.12	status:404
+`[1:],
+		dst: []string{
+			"192.168.0.1",
+			"172.16.0.12",
+		},
+	},
+	{
+		keys: []string{"host", "status"},
+		src: `
+host:192.168.0.1	status:200
+host:172.16.0.12	status:404
+`[1:],
+		dst: []string{
+			"192.168.0.1\t200",
+			"172.16.0.12\t404",
+		},
+	},
+}
+
+func TestMultipleKeys(t *testing.T) {
+	for _, test := range MultipleKeysTests {
+		l := NewLTSVScanner(test.keys,
+			strings.NewReader(test.src))
+
+		expect := test.dst
+		actual := []string{}
+		for l.Scan() {
+			actual = append(actual, l.Text())
+		}
+		if !reflect.DeepEqual(actual, expect) {
+			t.Errorf("(keys: %q) got %q, want %q",
+				test.keys, actual, expect)
+		}
+	}
+}

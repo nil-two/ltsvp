@@ -34,6 +34,15 @@ func printErr(err error) {
 	fmt.Fprintln(os.Stderr, "ltsvp:", err)
 }
 
+func newLTSVScannerFromOption(opt *Option) (l *LTSVScanner, err error) {
+	keys := ParseKeysList(opt.List)
+	reader, err := argf.From(opt.Files)
+	if err != nil {
+		return nil, err
+	}
+	return NewLTSVScanner(keys, reader), nil
+}
+
 func do(l *LTSVScanner) error {
 	for l.Scan() {
 		fmt.Println(l.Text())
@@ -56,14 +65,11 @@ func _main() int {
 		return 0
 	}
 
-	r, err := argf.From(opt.Files)
+	l, err := newLTSVScannerFromOption(opt)
 	if err != nil {
 		printErr(err)
 		return 2
 	}
-
-	keys := ParseKeysList(opt.List)
-	l := NewLTSVScanner(keys, r)
 	if err := do(l); err != nil {
 		printErr(err)
 		return 1
