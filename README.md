@@ -1,7 +1,7 @@
 ltsvp
 =====
 
-Print selected parts of ltsv from each FILE to standard output.
+Print selected parts of LTSV from each FILE to standard output.
 
 Usage
 -----

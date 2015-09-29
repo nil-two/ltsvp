@@ -11,7 +11,7 @@ import (
 func usage() {
 	os.Stderr.WriteString(`
 Usage: ltsvp OPTION... [FILE]...
-Print selected parts of ltsv from each FILE to standard output.
+Print selected parts of LTSV from each FILE to standard output.
 
 Options:
   -k, --keys=LIST          select only these keys
