@@ -69,3 +69,20 @@ func TestNewLTSVScanner(t *testing.T) {
 			keys, reader, actual, expect)
 	}
 }
+
+func TestScan(t *testing.T) {
+	keys := []string{"host"}
+	reader := strings.NewReader(`
+host:192.168.0.1	status:200
+host:172.16.0.12	status:404
+`[1:])
+	l := NewLTSVScanner(keys, reader)
+	expects := []bool{true, true, false}
+	for i := 0; i < len(expects); i++ {
+		expect := expects[i]
+		actual := l.Scan()
+		if actual != expect {
+			t.Errorf("Scan[%v]: got %v, want %v", i, actual, expect)
+		}
+	}
+}
