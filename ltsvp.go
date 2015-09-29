@@ -41,6 +41,7 @@ func (l *LTSVScanner) Scan() bool {
 	recode, err := l.reader.Read()
 	if err != nil {
 		l.err = err
+		l.line = ""
 		return false
 	}
 
