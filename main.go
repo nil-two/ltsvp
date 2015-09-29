@@ -43,6 +43,7 @@ func newLTSVScannerFromOption(opt *Option) (l *LTSVScanner, err error) {
 
 	l = NewLTSVScanner(keys, reader)
 	l.Delimiter = opt.Delimiter
+	l.RemainLTSV = opt.RemainLTSV
 	return l, nil
 }
 

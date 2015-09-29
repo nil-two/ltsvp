@@ -23,6 +23,8 @@ func ParseOption(args []string) (opt *Option, err error) {
 	f.StringVar(&opt.List, "keys", "", "")
 	f.StringVar(&opt.Delimiter, "d", "\t", "")
 	f.StringVar(&opt.Delimiter, "delimiter", "\t", "")
+	f.BoolVar(&opt.RemainLTSV, "r", false, "")
+	f.BoolVar(&opt.RemainLTSV, "remain-ltsv", false, "")
 	f.BoolVar(&opt.IsHelp, "h", false, "")
 	f.BoolVar(&opt.IsHelp, "help", false, "")
 	f.BoolVar(&opt.IsVersion, "v", false, "")
