@@ -61,9 +61,10 @@ func TestNewLTSVScanner(t *testing.T) {
 	reader := strings.NewReader(``)
 
 	expect := &LTSVScanner{
-		Delimiter: "\t",
-		keys:      keys,
-		reader:    goltsv.NewReader(reader),
+		Delimiter:  "\t",
+		RemainLTSV: false,
+		keys:       keys,
+		reader:     goltsv.NewReader(reader),
 	}
 	actual := NewLTSVScanner(keys, reader)
 	if !reflect.DeepEqual(actual, expect) {
@@ -176,6 +177,67 @@ func TestDelimiter(t *testing.T) {
 		if !reflect.DeepEqual(actual, expect) {
 			t.Errorf("(keys: %q, delimiter: %q) got %q, want %q",
 				test.keys, test.delimiter, actual, expect)
+		}
+	}
+}
+
+var RemainLTSVTests = []struct {
+	keys      []string
+	delimiter string
+	src       string
+	dst       []string
+}{
+	{
+		keys:      []string{"host"},
+		delimiter: "\t",
+		src: `
+host:192.168.0.1	status:200
+host:172.16.0.12	status:404
+`[1:],
+		dst: []string{
+			"host:192.168.0.1",
+			"host:172.16.0.12",
+		},
+	},
+	{
+		keys:      []string{"status", "host"},
+		delimiter: "\t",
+		src: `
+host:192.168.0.1	status:200
+host:172.16.0.12	status:404
+`[1:],
+		dst: []string{
+			"status:200\thost:192.168.0.1",
+			"status:404\thost:172.16.0.12",
+		},
+	},
+	{
+		keys:      []string{"status", "host"},
+		delimiter: "---",
+		src: `
+host:192.168.0.1	status:200
+host:172.16.0.12	status:404
+`[1:],
+		dst: []string{
+			"status:200\thost:192.168.0.1",
+			"status:404\thost:172.16.0.12",
+		},
+	},
+}
+
+func TestRemainLTSV(t *testing.T) {
+	for _, test := range RemainLTSVTests {
+		l := NewLTSVScanner(test.keys, strings.NewReader(test.src))
+		l.RemainLTSV = true
+
+		expect := test.dst
+		actual := []string{}
+		for l.Scan() {
+			actual = append(actual, l.Text())
+		}
+		if !reflect.DeepEqual(actual, expect) {
+			t.Errorf("(keys: %q, remainLTSV: true) got %q, want %q",
+				test.keys, actual, expect)
 		}
 	}
 }
