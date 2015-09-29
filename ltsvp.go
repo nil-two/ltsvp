@@ -52,3 +52,7 @@ func (l *LTSVScanner) Scan() bool {
 
 	return true
 }
+
+func (l *LTSVScanner) Text() string {
+	return l.line
+}
