@@ -241,3 +241,26 @@ func TestRemainLTSV(t *testing.T) {
 		}
 	}
 }
+
+func TestBytes(t *testing.T) {
+	keys := []string{"host"}
+	reader := strings.NewReader(`
+host:192.168.0.1	status:200
+host:172.16.0.12	status:404
+`[1:])
+	l := NewLTSVScanner(keys, reader)
+
+	expects := [][]byte{
+		[]byte("192.168.0.1"),
+		[]byte("172.16.0.12"),
+	}
+	for i := 0; i < len(expects); i++ {
+		l.Scan()
+		expect := expects[i]
+		actual := l.Bytes()
+		if !reflect.DeepEqual(actual, expect) {
+			t.Errorf("Scan %v time: got %v, want %v",
+				i+1, actual, expect)
+		}
+	}
+}
