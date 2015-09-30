@@ -76,6 +76,10 @@ func (l *LTSVScanner) Err() error {
 	return l.err
 }
 
+func (l *LTSVScanner) Bytes() []byte {
+	return []byte(l.text)
+}
+
 func (l *LTSVScanner) Text() string {
 	return l.text
 }
