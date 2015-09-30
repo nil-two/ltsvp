@@ -14,14 +14,15 @@ Usage: ltsvp OPTION... [FILE]...
 Print selected parts of LTSV from each FILE to standard output.
 
 Options:
-  -k, --keys=LIST          select only these keys
-                           LIST is made up of keys separated by commas
-                             host           # Select host
-                             host,time,ua   # Select host, time, and ua
+  -k, --keys=LIST          select only these keys (required)
   -d, --delimiter=STRING   use STRING to separate parts (default: \t)
   -r, --remain-ltsv        print selected parts as LTSV
   -h, --help               display this help text and exit
   -v, --version            display version information and exit
+
+LIST is made up of keys separated by commas.
+  host           # Select host
+  host,time,ua   # Select host, time, and ua
 `[1:])
 }
 
