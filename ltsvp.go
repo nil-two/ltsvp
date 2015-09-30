@@ -36,6 +36,21 @@ func NewLTSVScanner(keys []string, r io.Reader) *LTSVScanner {
 	}
 }
 
+func (l *LTSVScanner) Err() error {
+	if l.err == io.EOF {
+		return nil
+	}
+	return l.err
+}
+
+func (l *LTSVScanner) Bytes() []byte {
+	return []byte(l.text)
+}
+
+func (l *LTSVScanner) Text() string {
+	return l.text
+}
+
 func (l *LTSVScanner) Scan() bool {
 	if l.err != nil {
 		return false
@@ -67,19 +82,4 @@ func (l *LTSVScanner) Scan() bool {
 	}
 
 	return true
-}
-
-func (l *LTSVScanner) Err() error {
-	if l.err == io.EOF {
-		return nil
-	}
-	return l.err
-}
-
-func (l *LTSVScanner) Bytes() []byte {
-	return []byte(l.text)
-}
-
-func (l *LTSVScanner) Text() string {
-	return l.text
 }
