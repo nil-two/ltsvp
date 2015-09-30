@@ -249,6 +249,15 @@ host:172.16.0.12	status:404
 	}
 }
 
+func BenchmarkNew(b *testing.B) {
+	scanSrc := strings.Repeat("key1:value\tkey2:value2\tkey3:value3", 1000)
+	for i := 0; i < b.N; i++ {
+		keys := []string{"key2", "key3"}
+		reader := strings.NewReader(scanSrc)
+		NewLTSVScanner(keys, reader)
+	}
+}
+
 func BenchmarkScan(b *testing.B) {
 	scanSrc := strings.Repeat("key1:value\tkey2:value2\tkey3:value3", 1000)
 
