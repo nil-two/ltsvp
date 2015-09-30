@@ -63,68 +63,73 @@ type ScanResult struct {
 	err  error
 }
 
-func TestScan(t *testing.T) {
-	keys := []string{"host"}
-	reader := strings.NewReader(`
+var ScanTests = []struct {
+	description string
+	src         string
+	keys        []string
+	result      []ScanResult
+}{
+	{
+		description: "regular LTSV",
+		keys:        []string{"host"},
+		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
-`[1:])
-	l := NewLTSVScanner(keys, reader)
-
-	expects := []ScanResult{
-		{scan: true, text: "192.168.0.1", err: nil},
-		{scan: true, text: "172.16.0.12", err: nil},
-		{scan: false, text: "", err: nil},
-	}
-	for i := 0; i < len(expects); i++ {
-		expect := expects[i]
-		actual := ScanResult{}
-		actual.scan = l.Scan()
-		actual.text = l.Text()
-		actual.err = l.Err()
-		if !reflect.DeepEqual(actual, expect) {
-			t.Errorf("Scan %v time: got %v, want %v",
-				i+1, actual, expect)
-		}
-	}
-}
-
-func TestScanError(t *testing.T) {
-	keys := []string{"host"}
-	reader := strings.NewReader(`
+`[1:],
+		result: []ScanResult{
+			{scan: true, text: "192.168.0.1", err: nil},
+			{scan: true, text: "172.16.0.12", err: nil},
+			{scan: false, text: "", err: nil},
+		},
+	},
+	{
+		description: "invalid LTSV",
+		keys:        []string{"host"},
+		src: `,
 host:192.168.0.1	status:200
 a	b	c
 host:172.16.0.12	status:404
-`[1:])
-	l := NewLTSVScanner(keys, reader)
+`[1:],
+		result: []ScanResult{
+			{scan: true, text: "192.168.0.1", err: nil},
+			{scan: false, text: "", err: goltsv.ErrLabelName},
+			{scan: false, text: "", err: goltsv.ErrLabelName},
+		},
+	},
+}
 
-	expects := []ScanResult{
-		{scan: true, text: "192.168.0.1", err: nil},
-		{scan: false, text: "", err: goltsv.ErrLabelName},
-		{scan: false, text: "", err: goltsv.ErrLabelName},
-	}
-	for i := 0; i < len(expects); i++ {
-		expect := expects[i]
-		actual := ScanResult{}
-		actual.scan = l.Scan()
-		actual.text = l.Text()
-		actual.err = l.Err()
-		if !reflect.DeepEqual(actual, expect) {
-			t.Errorf("Scan %v time: got %v, want %v",
-				i+1, actual, expect)
+func TestScan(t *testing.T) {
+	for _, test := range ScanTests {
+		reader := strings.NewReader(test.src)
+		l := NewLTSVScanner(test.keys, reader)
+		for i := 0; i < len(test.result); i++ {
+			scan := l.Scan()
+			expect := test.result[i]
+			actual := ScanResult{
+				scan: scan,
+				text: l.Text(),
+				err:  l.Err(),
+			}
+			if !reflect.DeepEqual(actual, expect) {
+				t.Errorf("%s: %v: got %v, want %v",
+					test.description, i+1,
+					actual, expect)
+			}
 		}
 	}
 }
 
 var DelimiterTests = []struct {
-	keys      []string
-	delimiter string
-	src       string
-	dst       []string
+	description string
+	keys        []string
+	delimiter   string
+	src         string
+	dst         []string
 }{
 	{
-		keys:      []string{"host", "status"},
-		delimiter: ",",
+		description: "with comma",
+		keys:        []string{"host", "status"},
+		delimiter:   ",",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
@@ -135,8 +140,9 @@ host:172.16.0.12	status:404
 		},
 	},
 	{
-		keys:      []string{"host", "status"},
-		delimiter: "--",
+		description: "with double dash",
+		keys:        []string{"host", "status"},
+		delimiter:   "--",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
@@ -159,21 +165,23 @@ func TestDelimiter(t *testing.T) {
 			actual = append(actual, l.Text())
 		}
 		if !reflect.DeepEqual(actual, expect) {
-			t.Errorf("(keys: %q, delimiter: %q) got %q, want %q",
-				test.keys, test.delimiter, actual, expect)
+			t.Errorf("%s: got %q, want %q",
+				test.description, actual, expect)
 		}
 	}
 }
 
 var RemainLTSVTests = []struct {
-	keys      []string
-	delimiter string
-	src       string
-	dst       []string
+	description string
+	keys        []string
+	delimiter   string
+	src         string
+	dst         []string
 }{
 	{
-		keys:      []string{"host"},
-		delimiter: "\t",
+		description: "one key",
+		keys:        []string{"host"},
+		delimiter:   "\t",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
@@ -184,8 +192,9 @@ host:172.16.0.12	status:404
 		},
 	},
 	{
-		keys:      []string{"status", "host"},
-		delimiter: "\t",
+		description: "two keys",
+		keys:        []string{"status", "host"},
+		delimiter:   "\t",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
@@ -196,8 +205,9 @@ host:172.16.0.12	status:404
 		},
 	},
 	{
-		keys:      []string{"status", "host"},
-		delimiter: "---",
+		description: "ignore delimiter",
+		keys:        []string{"status", "host"},
+		delimiter:   "---",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
@@ -220,8 +230,8 @@ func TestRemainLTSV(t *testing.T) {
 			actual = append(actual, l.Text())
 		}
 		if !reflect.DeepEqual(actual, expect) {
-			t.Errorf("(keys: %q, remainLTSV: true) got %q, want %q",
-				test.keys, actual, expect)
+			t.Errorf("%s: got %q, want %q",
+				test.description, actual, expect)
 		}
 	}
 }
@@ -243,28 +253,26 @@ host:172.16.0.12	status:404
 		expect := expects[i]
 		actual := l.Bytes()
 		if !reflect.DeepEqual(actual, expect) {
-			t.Errorf("Scan %v time: got %v, want %v",
+			t.Errorf("%v: got %v, want %v",
 				i+1, actual, expect)
 		}
 	}
 }
 
 func BenchmarkNew(b *testing.B) {
-	scanSrc := strings.Repeat("key1:value\tkey2:value2\tkey3:value3", 1000)
+	src := strings.Repeat("key1:value\tkey2:value2\tkey3:value3", 1000)
 	for i := 0; i < b.N; i++ {
 		keys := []string{"key2", "key3"}
-		reader := strings.NewReader(scanSrc)
+		reader := strings.NewReader(src)
 		NewLTSVScanner(keys, reader)
 	}
 }
 
 func BenchmarkScan(b *testing.B) {
-	scanSrc := strings.Repeat("key1:value\tkey2:value2\tkey3:value3", 1000)
-
+	src := strings.Repeat("key1:value\tkey2:value2\tkey3:value3", 1000)
 	for i := 0; i < b.N; i++ {
 		keys := []string{"key2", "key3"}
-		reader := strings.NewReader(scanSrc)
-
+		reader := strings.NewReader(src)
 		l := NewLTSVScanner(keys, reader)
 		for l.Scan() {
 		}
