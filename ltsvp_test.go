@@ -83,6 +83,19 @@ host:172.16.0.12	status:404
 		},
 	},
 	{
+		description: "duplicated keys",
+		keys:        []string{"status", "status"},
+		src: `,
+host:192.168.0.1	status:200
+host:172.16.0.12	status:404
+`[1:],
+		result: []ScanResult{
+			{scan: true, text: "200\t200", err: nil},
+			{scan: true, text: "404\t404", err: nil},
+			{scan: false, text: "", err: nil},
+		},
+	},
+	{
 		description: "invalid LTSV",
 		keys:        []string{"host"},
 		src: `,
@@ -215,6 +228,19 @@ host:172.16.0.12	status:404
 		dst: []string{
 			"status:200\thost:192.168.0.1",
 			"status:404\thost:172.16.0.12",
+		},
+	},
+	{
+		description: "duplicated keys",
+		keys:        []string{"status", "status"},
+		delimiter:   "\t",
+		src: `
+host:192.168.0.1	status:200
+host:172.16.0.12	status:404
+`[1:],
+		dst: []string{
+			"status:200\tstatus:200",
+			"status:404\tstatus:404",
 		},
 	},
 }
