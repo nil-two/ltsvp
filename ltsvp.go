@@ -67,10 +67,7 @@ func (l *LTSVScanner) Scan() bool {
 	case l.RemainLTSV:
 		var fields []string
 		for _, key := range l.keys {
-			if value, ok := recode[key]; ok {
-				field := key + ":" + value
-				fields = append(fields, field)
-			}
+			fields = append(fields, key+":"+recode[key])
 		}
 		l.text = strings.Join(fields, "\t")
 	default:
