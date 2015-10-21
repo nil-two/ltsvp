@@ -96,6 +96,32 @@ host:172.16.0.12	status:404
 		},
 	},
 	{
+		description: "non-existent key",
+		keys:        []string{"ua"},
+		src: `,
+host:192.168.0.1	status:200
+host:172.16.0.12	status:404
+`[1:],
+		result: []ScanResult{
+			{scan: true, text: "", err: nil},
+			{scan: true, text: "", err: nil},
+			{scan: false, text: "", err: nil},
+		},
+	},
+	{
+		description: "non-existent keys",
+		keys:        []string{"time", "status", "host", "ua"},
+		src: `,
+host:192.168.0.1	status:200
+host:172.16.0.12	status:404
+`[1:],
+		result: []ScanResult{
+			{scan: true, text: "\t200\t192.168.0.1\t", err: nil},
+			{scan: true, text: "\t404\t172.16.0.12\t", err: nil},
+			{scan: false, text: "", err: nil},
+		},
+	},
+	{
 		description: "invalid LTSV",
 		keys:        []string{"host"},
 		src: `,
@@ -241,6 +267,32 @@ host:172.16.0.12	status:404
 		dst: []string{
 			"status:200\tstatus:200",
 			"status:404\tstatus:404",
+		},
+	},
+	{
+		description: "non-existent key",
+		keys:        []string{"ua"},
+		delimiter:   "\t",
+		src: `
+host:192.168.0.1	status:200
+host:172.16.0.12	status:404
+`[1:],
+		dst: []string{
+			"ua:",
+			"ua:",
+		},
+	},
+	{
+		description: "non-existent keys",
+		keys:        []string{"time", "status", "host", "ua"},
+		delimiter:   "\t",
+		src: `
+host:192.168.0.1	status:200
+host:172.16.0.12	status:404
+`[1:],
+		dst: []string{
+			"time:\tstatus:200\thost:192.168.0.1\tua:",
+			"time:\tstatus:404\thost:172.16.0.12\tua:",
 		},
 	},
 }
