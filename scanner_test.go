@@ -4,8 +4,6 @@ import (
 	"reflect"
 	"strings"
 	"testing"
-
-	"github.com/ymotongpoo/goltsv"
 )
 
 var ParseKeysListTests = []struct {
@@ -58,16 +56,16 @@ func TestParseKeysList(t *testing.T) {
 }
 
 type ScanResult struct {
-	scan bool
-	text string
-	err  error
+	scan  bool
+	text  string
+	isErr bool
 }
 
 var ScanTests = []struct {
 	description string
 	src         string
 	keys        []string
-	result      []ScanResult
+	results     []ScanResult
 }{
 	{
 		description: "regular LTSV",
@@ -76,10 +74,10 @@ var ScanTests = []struct {
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
 `[1:],
-		result: []ScanResult{
-			{scan: true, text: "192.168.0.1", err: nil},
-			{scan: true, text: "172.16.0.12", err: nil},
-			{scan: false, text: "", err: nil},
+		results: []ScanResult{
+			{scan: true, text: "192.168.0.1", isErr: false},
+			{scan: true, text: "172.16.0.12", isErr: false},
+			{scan: false, text: "", isErr: false},
 		},
 	},
 	{
@@ -89,10 +87,10 @@ host:172.16.0.12	status:404
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
 `[1:],
-		result: []ScanResult{
-			{scan: true, text: "200\t200", err: nil},
-			{scan: true, text: "404\t404", err: nil},
-			{scan: false, text: "", err: nil},
+		results: []ScanResult{
+			{scan: true, text: "200\t200", isErr: false},
+			{scan: true, text: "404\t404", isErr: false},
+			{scan: false, text: "", isErr: false},
 		},
 	},
 	{
@@ -102,10 +100,10 @@ host:172.16.0.12	status:404
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
 `[1:],
-		result: []ScanResult{
-			{scan: true, text: "", err: nil},
-			{scan: true, text: "", err: nil},
-			{scan: false, text: "", err: nil},
+		results: []ScanResult{
+			{scan: true, text: "", isErr: false},
+			{scan: true, text: "", isErr: false},
+			{scan: false, text: "", isErr: false},
 		},
 	},
 	{
@@ -115,10 +113,10 @@ host:172.16.0.12	status:404
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
 `[1:],
-		result: []ScanResult{
-			{scan: true, text: "\t200\t192.168.0.1\t", err: nil},
-			{scan: true, text: "\t404\t172.16.0.12\t", err: nil},
-			{scan: false, text: "", err: nil},
+		results: []ScanResult{
+			{scan: true, text: "\t200\t192.168.0.1\t", isErr: false},
+			{scan: true, text: "\t404\t172.16.0.12\t", isErr: false},
+			{scan: false, text: "", isErr: false},
 		},
 	},
 	{
@@ -129,10 +127,10 @@ host:192.168.0.1	status:200
 a	b	c
 host:172.16.0.12	status:404
 `[1:],
-		result: []ScanResult{
-			{scan: true, text: "192.168.0.1", err: nil},
-			{scan: false, text: "", err: goltsv.ErrLabelName},
-			{scan: false, text: "", err: goltsv.ErrLabelName},
+		results: []ScanResult{
+			{scan: true, text: "192.168.0.1", isErr: false},
+			{scan: false, text: "", isErr: true},
+			{scan: false, text: "", isErr: true},
 		},
 	},
 }
@@ -141,13 +139,13 @@ func TestScan(t *testing.T) {
 	for _, test := range ScanTests {
 		reader := strings.NewReader(test.src)
 		l := NewLTSVScanner(test.keys, reader)
-		for i := 0; i < len(test.result); i++ {
+		for i := 0; i < len(test.results); i++ {
 			scan := l.Scan()
-			expect := test.result[i]
+			expect := test.results[i]
 			actual := ScanResult{
-				scan: scan,
-				text: l.Text(),
-				err:  l.Err(),
+				scan:  scan,
+				text:  l.Text(),
+				isErr: l.Err() != nil,
 			}
 			if !reflect.DeepEqual(actual, expect) {
 				t.Errorf("%s: %v: got %v, want %v",
