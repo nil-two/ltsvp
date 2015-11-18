@@ -17,7 +17,7 @@ Options:
   -k, --keys=LIST          select only these keys (required)
   -d, --delimiter=STRING   use STRING to separate parts (default: \t)
   -r, --remain-ltsv        print selected parts as LTSV
-  -h, --help               display this help text and exit
+      --help               display this help text and exit
   -v, --version            display version information and exit
 
 LIST is made up of keys separated by commas.
@@ -36,7 +36,7 @@ type Option struct {
 	List       string `short:"k" long:"keys" required:"true"`
 	Delimiter  string `short:"d" long:"delimiter" default:"\t"`
 	RemainLTSV bool   `short:"r" long:"remain-ltsv"`
-	IsHelp     bool   `short:"h" long:"help"`
+	IsHelp     bool   `          long:"help"`
 	IsVersion  bool   `short:"v" long:"version"`
 	Files      []string
 }

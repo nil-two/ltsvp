@@ -13,7 +13,7 @@ Options:
   -k, --keys=LIST          select only these keys (required)
   -d, --delimiter=STRING   use STRING to separate parts (default: \t)
   -r, --remain-ltsv        print selected parts as LTSV
-  -h, --help               display this help text and exit
+      --help               display this help text and exit
   -v, --version            display version information and exit
 
 LIST is made up of keys separated by commas.
