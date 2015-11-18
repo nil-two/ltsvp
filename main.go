@@ -14,11 +14,16 @@ Usage: ltsvp OPTION... [FILE]...
 Print selected parts of LTSV from each FILE to standard output.
 
 Options:
-  -k, --keys=LIST          select only these keys (required)
-  -d, --delimiter=STRING   use STRING to separate parts (default: \t)
-  -r, --remain-ltsv        print selected parts as LTSV
-      --help               display this help text and exit
-      --version            output version information and exit
+  -k, --keys=LIST
+                 select only these keys (required)
+  -D, --output-delimiter=STRING
+                 use STRING to separate parts (default: \t)
+  -r, --remain-ltsv
+                 print selected parts as LTSV
+  --help
+                 display this help text and exit
+  --version
+                 output version information and exit
 
 LIST is made up of keys separated by commas.
   host           # Select host
@@ -34,7 +39,7 @@ func version() {
 
 type Option struct {
 	List            string `short:"k" long:"keys" required:"true"`
-	OutputDelimiter string `short:"d" long:"delimiter" default:"\t"`
+	OutputDelimiter string `short:"D" long:"output-delimiter" default:"\t"`
 	RemainLTSV      bool   `short:"r" long:"remain-ltsv"`
 	IsHelp          bool   `          long:"help"`
 	IsVersion       bool   `          long:"version"`
