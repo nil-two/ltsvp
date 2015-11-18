@@ -18,7 +18,7 @@ Options:
   -d, --delimiter=STRING   use STRING to separate parts (default: \t)
   -r, --remain-ltsv        print selected parts as LTSV
       --help               display this help text and exit
-  -v, --version            display version information and exit
+      --version            display version information and exit
 
 LIST is made up of keys separated by commas.
   host           # Select host
@@ -37,7 +37,7 @@ type Option struct {
 	Delimiter  string `short:"d" long:"delimiter" default:"\t"`
 	RemainLTSV bool   `short:"r" long:"remain-ltsv"`
 	IsHelp     bool   `          long:"help"`
-	IsVersion  bool   `short:"v" long:"version"`
+	IsVersion  bool   `          long:"version"`
 	Files      []string
 }
 
