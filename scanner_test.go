@@ -157,16 +157,16 @@ func TestScan(t *testing.T) {
 }
 
 var DelimiterTests = []struct {
-	description string
-	keys        []string
-	delimiter   string
-	src         string
-	dst         []string
+	description     string
+	keys            []string
+	outputDelimiter string
+	src             string
+	dst             []string
 }{
 	{
-		description: "with comma",
-		keys:        []string{"host", "status"},
-		delimiter:   ",",
+		description:     "with comma",
+		keys:            []string{"host", "status"},
+		outputDelimiter: ",",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
@@ -177,9 +177,9 @@ host:172.16.0.12	status:404
 		},
 	},
 	{
-		description: "with double dash",
-		keys:        []string{"host", "status"},
-		delimiter:   "--",
+		description:     "with double dash",
+		keys:            []string{"host", "status"},
+		outputDelimiter: "--",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
@@ -194,7 +194,7 @@ host:172.16.0.12	status:404
 func TestDelimiter(t *testing.T) {
 	for _, test := range DelimiterTests {
 		l := NewLTSVScanner(test.keys, strings.NewReader(test.src))
-		l.Delimiter = test.delimiter
+		l.OutputDelimiter = test.outputDelimiter
 
 		expect := test.dst
 		actual := []string{}
@@ -209,16 +209,16 @@ func TestDelimiter(t *testing.T) {
 }
 
 var RemainLTSVTests = []struct {
-	description string
-	keys        []string
-	delimiter   string
-	src         string
-	dst         []string
+	description     string
+	keys            []string
+	outputDelimiter string
+	src             string
+	dst             []string
 }{
 	{
-		description: "one key",
-		keys:        []string{"host"},
-		delimiter:   "\t",
+		description:     "one key",
+		keys:            []string{"host"},
+		outputDelimiter: "\t",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
@@ -229,9 +229,9 @@ host:172.16.0.12	status:404
 		},
 	},
 	{
-		description: "two keys",
-		keys:        []string{"status", "host"},
-		delimiter:   "\t",
+		description:     "two keys",
+		keys:            []string{"status", "host"},
+		outputDelimiter: "\t",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
@@ -242,9 +242,9 @@ host:172.16.0.12	status:404
 		},
 	},
 	{
-		description: "ignore delimiter",
-		keys:        []string{"status", "host"},
-		delimiter:   "---",
+		description:     "ignore delimiter",
+		keys:            []string{"status", "host"},
+		outputDelimiter: "---",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
@@ -255,9 +255,9 @@ host:172.16.0.12	status:404
 		},
 	},
 	{
-		description: "duplicated keys",
-		keys:        []string{"status", "status"},
-		delimiter:   "\t",
+		description:     "duplicated keys",
+		keys:            []string{"status", "status"},
+		outputDelimiter: "\t",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
@@ -268,9 +268,9 @@ host:172.16.0.12	status:404
 		},
 	},
 	{
-		description: "non-existent key",
-		keys:        []string{"ua"},
-		delimiter:   "\t",
+		description:     "non-existent key",
+		keys:            []string{"ua"},
+		outputDelimiter: "\t",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
@@ -281,9 +281,9 @@ host:172.16.0.12	status:404
 		},
 	},
 	{
-		description: "non-existent keys",
-		keys:        []string{"time", "status", "host", "ua"},
-		delimiter:   "\t",
+		description:     "non-existent keys",
+		keys:            []string{"time", "status", "host", "ua"},
+		outputDelimiter: "\t",
 		src: `
 host:192.168.0.1	status:200
 host:172.16.0.12	status:404
