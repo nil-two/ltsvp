@@ -20,19 +20,19 @@ func ParseKeysList(list string) []string {
 }
 
 type LTSVScanner struct {
-	Delimiter  string
-	RemainLTSV bool
-	keys       []string
-	text       string
-	err        error
-	reader     *goltsv.LTSVReader
+	OutputDelimiter string
+	RemainLTSV      bool
+	keys            []string
+	text            string
+	err             error
+	reader          *goltsv.LTSVReader
 }
 
 func NewLTSVScanner(keys []string, r io.Reader) *LTSVScanner {
 	return &LTSVScanner{
-		Delimiter: "\t",
-		keys:      keys,
-		reader:    goltsv.NewReader(r),
+		OutputDelimiter: "\t",
+		keys:            keys,
+		reader:          goltsv.NewReader(r),
 	}
 }
 
@@ -75,7 +75,7 @@ func (l *LTSVScanner) Scan() bool {
 		for _, key := range l.keys {
 			values = append(values, recode[key])
 		}
-		l.text = strings.Join(values, l.Delimiter)
+		l.text = strings.Join(values, l.OutputDelimiter)
 	}
 
 	return true

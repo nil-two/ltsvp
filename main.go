@@ -33,12 +33,12 @@ func version() {
 }
 
 type Option struct {
-	List       string `short:"k" long:"keys" required:"true"`
-	Delimiter  string `short:"d" long:"delimiter" default:"\t"`
-	RemainLTSV bool   `short:"r" long:"remain-ltsv"`
-	IsHelp     bool   `          long:"help"`
-	IsVersion  bool   `          long:"version"`
-	Files      []string
+	List            string `short:"k" long:"keys" required:"true"`
+	OutputDelimiter string `short:"d" long:"delimiter" default:"\t"`
+	RemainLTSV      bool   `short:"r" long:"remain-ltsv"`
+	IsHelp          bool   `          long:"help"`
+	IsVersion       bool   `          long:"version"`
+	Files           []string
 }
 
 func parseOption(args []string) (opt *Option, err error) {
@@ -60,7 +60,7 @@ func newLTSVScannerFromOption(opt *Option) (l *LTSVScanner, err error) {
 	}
 
 	l = NewLTSVScanner(keys, reader)
-	l.Delimiter = opt.Delimiter
+	l.OutputDelimiter = opt.OutputDelimiter
 	l.RemainLTSV = opt.RemainLTSV
 	return l, nil
 }
