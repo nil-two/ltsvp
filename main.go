@@ -33,7 +33,7 @@ LIST is made up of keys separated by commas.
 
 func version() {
 	os.Stderr.WriteString(`
-0.2.0
+0.3.0
 `[1:])
 }
 
