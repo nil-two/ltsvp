@@ -18,7 +18,7 @@ Options:
   -d, --delimiter=STRING   use STRING to separate parts (default: \t)
   -r, --remain-ltsv        print selected parts as LTSV
       --help               display this help text and exit
-      --version            display version information and exit
+      --version            output version information and exit
 
 LIST is made up of keys separated by commas.
   host           # Select host
