@@ -74,6 +74,19 @@ key  = { letter | "\," }
 
 letter is a unicode character other than `,`.
 
+### -D, --output-delimiter=STRING
+
+Change the output delimiter to `STRING`.
+`STRING` is unicode characters.
+
+```sh
+# Outputs with a slash delimited
+ltsvp --keys=time,host --output-delimiter=/
+
+# Outputs with a "::" delimited
+ltsvp --keys=time,host --output-delimiter=::
+```
+
 License
 -------
 
