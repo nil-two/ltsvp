@@ -87,6 +87,15 @@ ltsvp --keys=time,host --output-delimiter=/
 ltsvp --keys=time,host --output-delimiter=::
 ```
 
+### -r, --remain-ltsv
+
+Output selected parts in LTSV format.
+
+```sh
+# Output as LTSV
+ltsvp --keys=time,host --remain-ltsv
+```
+
 License
 -------
 
