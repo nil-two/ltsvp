@@ -35,6 +35,17 @@ Installation
 go get github.com/kusabashira/ltsvp
 ```
 
+Options
+-------
+
+### --help
+
+Display the usage and exit.
+
+### --version
+
+Output the version of ltsvp.
+
 License
 -------
 
