@@ -46,6 +46,34 @@ Display the usage and exit.
 
 Output the version of ltsvp.
 
+### -k, --keys=LIST
+
+Select only specified keys.
+
+Keys separated by a `,`.
+
+```sh
+# select only host
+ltsvp --keys=host
+
+# select only host, time, and ua
+ltsvp --keys=name,time,ua
+
+# select only "foo,bar" and "baz"
+ltsvp --keys="foo\,bar,baz"
+```
+
+#### syntax of keys list
+
+Here is the syntax of headers in extended BNF.
+
+```
+keys = key , { "," , key }
+key  = { letter | "\," }
+```
+
+letter is a unicode character other than `,`.
+
 License
 -------
 
