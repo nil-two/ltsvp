@@ -26,6 +26,15 @@ LIST is made up of keys separated by commas.
   host,time,ua   # Select host, time, and ua
 ```
 
+Installation
+------------
+
+### go get
+
+```
+go get github.com/kusabashira/ltsvp
+```
+
 License
 -------
 
