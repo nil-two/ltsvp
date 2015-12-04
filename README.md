@@ -1,7 +1,7 @@
 ltsvp
 =====
  
-[![Build Status](https://travis-ci.org/kusabashira/ltsvp.svg?branch=master)](https://travis-ci.org/kusabashira/ltsvp.svg?branch=master)
+[![Build Status](https://travis-ci.org/kusabashira/ltsvp.svg?branch=master)](https://travis-ci.org/kusabashira/ltsvp)
  
 Print selected parts of LTSV from each FILE to standard output.
  
