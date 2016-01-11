@@ -9,9 +9,10 @@ import (
 )
 
 var (
+	name    = "ltsvp"
 	version = "0.3.0"
 
-	flag            = pflag.NewFlagSet("ltsvp", pflag.ContinueOnError)
+	flag            = pflag.NewFlagSet(name, pflag.ContinueOnError)
 	list            = pflag.StringP("keys", "k", "", "")
 	outputDelimiter = pflag.StringP("output-delimiter", "d", "\t", "")
 	remainLTSV      = pflag.BoolP("remain-ltsv", "r", false, "")
@@ -20,8 +21,8 @@ var (
 )
 
 func printUsage() {
-	os.Stderr.WriteString(`
-Usage: ltsvp OPTION... [FILE]...
+	fmt.Fprintf(os.Stderr, `
+Usage: %s OPTION... [FILE]...
 Print selected parts of LTSV from each FILE to standard output.
 
 Options:
@@ -39,7 +40,7 @@ Options:
 LIST is made up of keys separated by commas.
   host           # Select host
   host,time,ua   # Select host, time, and ua
-`[1:])
+`[1:], name)
 }
 
 func printVersion() {
@@ -54,13 +55,11 @@ func do(l *LTSVScanner) error {
 }
 
 func printErr(err error) {
-	fmt.Fprintln(os.Stderr, "ltsvp:", err)
+	fmt.Fprintf(os.Stderr, "%s: %s\n", name, err)
 }
 
 func guideToHelp() {
-	os.Stderr.WriteString(`
-Try 'ltsvp --help' for more information.
-`[1:])
+	fmt.Fprintf(os.Stderr, "Try '%s --help' for more information.\n", name)
 }
 
 func _main() int {
