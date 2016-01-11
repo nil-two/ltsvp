@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 
 	"github.com/ogier/pflag"
@@ -63,6 +64,7 @@ func guideToHelp() {
 }
 
 func main() {
+	flag.SetOutput(ioutil.Discard)
 	if err := flag.Parse(os.Args[1:]); err != nil {
 		printErr(err)
 		guideToHelp()
