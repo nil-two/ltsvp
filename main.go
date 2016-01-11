@@ -14,11 +14,11 @@ var (
 	version = "0.3.0"
 
 	flag            = pflag.NewFlagSet(name, pflag.ContinueOnError)
-	list            = pflag.StringP("keys", "k", "", "")
-	outputDelimiter = pflag.StringP("output-delimiter", "d", "\t", "")
-	remainLTSV      = pflag.BoolP("remain-ltsv", "r", false, "")
-	isHelp          = pflag.BoolP("help", "h", false, "")
-	isVersion       = pflag.BoolP("version", "v", false, "")
+	list            = flag.StringP("keys", "k", "", "")
+	outputDelimiter = flag.StringP("output-delimiter", "d", "\t", "")
+	remainLTSV      = flag.BoolP("remain-ltsv", "r", false, "")
+	isHelp          = flag.BoolP("help", "h", false, "")
+	isVersion       = flag.BoolP("version", "v", false, "")
 )
 
 func printUsage() {
