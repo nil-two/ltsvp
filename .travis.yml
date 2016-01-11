@@ -1,6 +1,26 @@
 language: go
 go:
   - 1.5
-
 script:
   - go test -v
+
+before_deploy:
+  - export RELEASES_PATH=/tmp/goxc
+  - export PATH="$GOPATH/bin:$PATH"
+  - go get github.com/laher/goxc
+  - goxc -tasks 'xc archive' -bc 'windows darwin linux' -d "$RELEASES_PATH" -resources-include='README*'
+deploy:
+  provider: releases
+  api_key:
+    secure: Rz4MWaXx0u9b0gqMlt0IPeXOi8W9XnfFAyjIL4ct1pRyXK056TORY9jHQINP20NIJXIi9L+bAAIW4S2PFLl2GXY/OLwSe2y2bwUSmyjNaF1zW+sY7cOrUI8MVJYtvyJ0QQ2qg8DoNH6TkyVe/LO6Rf0Ls3pYL4OXPTRxlOP6Z1XdEbInYQ259zmKZ0hAzGAQjczHC1m++TPaIllvtwuaO/vi45ovScrOU2aF6JGQb6sOssygAyrZ0hK3ktBWHSH0StPL4MlStrN14nBU4y61l12ue9LnrY/ZcrYQ0q9keR30paYfI7trKJWWul1GuBPCqabj43lZD5IvNVuulnU3zLtdryb/cXAXB0gfK9Gcki966jOg5N3eOCdmo+IeNiaAHWsXgddb4OWbPWjxRmT726pgrr2Of3MCXMA9dnYvLx4k1EHREIZBfWbJu792dizxxNk/emERC4Jr2251LhDBMvhtwJ8Ro1XSCa06TE3qsd0nUd56ZwyodxPOUfwwyOrs3isuVRId4/bUwPOKFCfaca16n+pbkfaliTLfsqqDdHXozGP+rUOx6mUcsfm2iWiIvD7cjJaJbgcDRVgy9gl+noV+7HFN8D9oeL1RTUI6eXyXF7tO2WHLH0R5YoRvTK47HMd07b/3VMoyC6t/sq1+CZ6djLhL3McfMXCqIqrhuFk=
+  file:
+    - $RELEASES_PATH/snapshot/ltsvp_windows_386.zip
+    - $RELEASES_PATH/snapshot/ltsvp_windows_amd64.zip
+    - $RELEASES_PATH/snapshot/ltsvp_darwin_386.zip
+    - $RELEASES_PATH/snapshot/ltsvp_darwin_amd64.zip
+    - $RELEASES_PATH/snapshot/ltsvp_linux_386.tar.gz
+    - $RELEASES_PATH/snapshot/ltsvp_linux_amd64.tar.gz
+    - $RELEASES_PATH/snapshot/ltsvp_linux_arm.tar.gz
+  on:
+    repo: kusabashira/ltsvp
+    tags: true
