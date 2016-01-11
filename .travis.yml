@@ -1,6 +1,7 @@
 language: go
 go:
   - 1.5
+
 script:
   - go test -v
 
@@ -9,6 +10,7 @@ before_deploy:
   - export PATH="$GOPATH/bin:$PATH"
   - go get github.com/laher/goxc
   - goxc -tasks 'xc archive' -bc 'windows darwin linux' -d "$RELEASES_PATH" -resources-include='README*'
+
 deploy:
   provider: releases
   api_key:
