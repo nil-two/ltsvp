@@ -9,6 +9,8 @@ import (
 )
 
 var (
+	version = "0.3.0"
+
 	flag            = pflag.NewFlagSet("ltsvp", pflag.ContinueOnError)
 	list            = pflag.StringP("keys", "k", "", "")
 	outputDelimiter = pflag.StringP("output-delimiter", "d", "\t", "")
@@ -41,9 +43,7 @@ LIST is made up of keys separated by commas.
 }
 
 func printVersion() {
-	os.Stderr.WriteString(`
-0.3.0
-`[1:])
+	fmt.Fprintln(os.Stderr, version)
 }
 
 func do(l *LTSVScanner) error {
