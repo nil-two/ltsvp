@@ -62,26 +62,26 @@ func guideToHelp() {
 	fmt.Fprintf(os.Stderr, "Try '%s --help' for more information.\n", name)
 }
 
-func _main() int {
+func main() {
 	if err := flag.Parse(os.Args[1:]); err != nil {
 		printErr(err)
 		guideToHelp()
-		return 2
+		os.Exit(2)
 	}
 	switch {
 	case *isHelp:
 		printUsage()
-		return 0
+		os.Exit(0)
 	case *isVersion:
 		printVersion()
-		return 0
+		os.Exit(0)
 	}
 
 	keys := ParseKeysList(*list)
 	r, err := argf.From(flag.Args())
 	if err != nil {
 		printErr(err)
-		return 2
+		os.Exit(2)
 	}
 
 	l := NewLTSVScanner(keys, r)
@@ -89,12 +89,7 @@ func _main() int {
 	l.RemainLTSV = *remainLTSV
 	if err := do(l); err != nil {
 		printErr(err)
-		return 1
+		os.Exit(1)
 	}
-	return 0
-}
-
-func main() {
-	e := _main()
-	os.Exit(e)
+	os.Exit(0)
 }
