@@ -11,7 +11,7 @@ import (
 
 var (
 	name    = "ltsvp"
-	version = "0.4.0"
+	version = "0.4.1"
 
 	flag            = pflag.NewFlagSet(name, pflag.ContinueOnError)
 	list            = flag.StringP("keys", "k", "", "")
