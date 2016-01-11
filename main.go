@@ -4,8 +4,17 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jessevdk/go-flags"
+	"github.com/ogier/pflag"
 	"github.com/yuya-takeyama/argf"
+)
+
+var (
+	flag            = pflag.NewFlagSet("ltsvp", pflag.ContinueOnError)
+	list            = pflag.StringP("keys", "k", "", "")
+	outputDelimiter = pflag.StringP("output-delimiter", "d", "\t", "")
+	remainLTSV      = pflag.BoolP("remain-ltsv", "r", false, "")
+	isHelp          = pflag.BoolP("help", "h", false, "")
+	isVersion       = pflag.BoolP("version", "v", false, "")
 )
 
 func usage() {
@@ -37,39 +46,6 @@ func version() {
 `[1:])
 }
 
-type Option struct {
-	List            string `short:"k" long:"keys" required:"true"`
-	OutputDelimiter string `short:"D" long:"output-delimiter" default:"\t"`
-	RemainLTSV      bool   `short:"r" long:"remain-ltsv"`
-	IsHelp          bool   `          long:"help"`
-	IsVersion       bool   `          long:"version"`
-	Files           []string
-}
-
-func parseOption(args []string) (opt *Option, err error) {
-	opt = &Option{}
-	flag := flags.NewParser(opt, flags.PassDoubleDash)
-
-	opt.Files, err = flag.ParseArgs(args)
-	if err != nil && !opt.IsHelp && !opt.IsVersion {
-		return nil, err
-	}
-	return opt, nil
-}
-
-func newLTSVScannerFromOption(opt *Option) (l *LTSVScanner, err error) {
-	keys := ParseKeysList(opt.List)
-	reader, err := argf.From(opt.Files)
-	if err != nil {
-		return nil, err
-	}
-
-	l = NewLTSVScanner(keys, reader)
-	l.OutputDelimiter = opt.OutputDelimiter
-	l.RemainLTSV = opt.RemainLTSV
-	return l, nil
-}
-
 func do(l *LTSVScanner) error {
 	for l.Scan() {
 		fmt.Println(l.Text())
@@ -88,27 +64,30 @@ Try 'ltsvp --help' for more information.
 }
 
 func _main() int {
-	opt, err := parseOption(os.Args[1:])
-	if err != nil {
+	if err := flag.Parse(os.Args[1:]); err != nil {
 		printErr(err)
 		guideToHelp()
 		return 2
 	}
 	switch {
-	case opt.IsHelp:
+	case *isHelp:
 		usage()
 		return 0
-	case opt.IsVersion:
+	case *isVersion:
 		version()
 		return 0
 	}
 
-	l, err := newLTSVScannerFromOption(opt)
+	keys := ParseKeysList(*list)
+	r, err := argf.From(flag.Args())
 	if err != nil {
 		printErr(err)
-		guideToHelp()
 		return 2
 	}
+
+	l := NewLTSVScanner(keys, r)
+	l.OutputDelimiter = *outputDelimiter
+	l.RemainLTSV = *remainLTSV
 	if err := do(l); err != nil {
 		printErr(err)
 		return 1
