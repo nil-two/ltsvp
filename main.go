@@ -17,7 +17,7 @@ var (
 	isVersion       = pflag.BoolP("version", "v", false, "")
 )
 
-func usage() {
+func printUsage() {
 	os.Stderr.WriteString(`
 Usage: ltsvp OPTION... [FILE]...
 Print selected parts of LTSV from each FILE to standard output.
@@ -71,7 +71,7 @@ func _main() int {
 	}
 	switch {
 	case *isHelp:
-		usage()
+		printUsage()
 		return 0
 	case *isVersion:
 		printVersion()
