@@ -82,12 +82,14 @@ func main() {
 	keys := ParseKeysList(*list)
 	if len(keys) == 0 {
 		printErr(fmt.Errorf("no specify LIST"))
+		guideToHelp()
 		os.Exit(2)
 	}
 
 	r, err := argf.From(flag.Args())
 	if err != nil {
 		printErr(err)
+		guideToHelp()
 		os.Exit(2)
 	}
 
