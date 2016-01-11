@@ -40,7 +40,7 @@ LIST is made up of keys separated by commas.
 `[1:])
 }
 
-func version() {
+func printVersion() {
 	os.Stderr.WriteString(`
 0.3.0
 `[1:])
@@ -74,7 +74,7 @@ func _main() int {
 		usage()
 		return 0
 	case *isVersion:
-		version()
+		printVersion()
 		return 0
 	}
 
