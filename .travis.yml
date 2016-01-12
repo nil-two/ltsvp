@@ -2,14 +2,17 @@ language: go
 go:
   - 1.5
 
+env:
+  global:
+    - PATH="$GOPATH/bin:$PATH"
+    - RELEASES_PATH=/tmp/releases
+
 script:
   - go test -v
 
 before_deploy:
-  - export RELEASES_PATH=/tmp/goxc
-  - export PATH="$GOPATH/bin:$PATH"
   - go get github.com/laher/goxc
-  - goxc -tasks 'xc archive' -bc 'windows darwin linux' -d "$RELEASES_PATH" -resources-include='README*'
+  - goxc -tasks 'xc archive' -bc 'windows darwin linux' -d "$RELEASES_PATH" -resources-include 'README*'
 
 deploy:
   provider: releases
