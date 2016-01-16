@@ -31,6 +31,10 @@ LIST is made up of keys separated by commas.
 Installation
 ------------
  
+### compiled binary
+
+See [releases](https://github.com/kusabashira/ltsvp/releases)
+
 ### go get
  
 ```
