@@ -55,7 +55,7 @@ func do(l *LTSVScanner) error {
 	return l.Err()
 }
 
-func printErr(err error) {
+func printErr(err interface{}) {
 	fmt.Fprintf(os.Stderr, "%s: %s\n", name, err)
 }
 
@@ -80,7 +80,7 @@ func main() {
 	}
 
 	if *list == "" {
-		printErr(fmt.Errorf("no specify LIST"))
+		printErr("no specify LIST")
 		guideToHelp()
 		os.Exit(2)
 	}
