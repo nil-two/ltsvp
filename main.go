@@ -15,7 +15,7 @@ var (
 
 	flag            = pflag.NewFlagSet(name, pflag.ContinueOnError)
 	list            = flag.StringP("keys", "k", "", "")
-	outputDelimiter = flag.StringP("output-delimiter", "d", "\t", "")
+	outputDelimiter = flag.StringP("output-delimiter", "D", "\t", "")
 	remainLTSV      = flag.BoolP("remain-ltsv", "r", false, "")
 	isHelp          = flag.BoolP("help", "h", false, "")
 	isVersion       = flag.BoolP("version", "v", false, "")
