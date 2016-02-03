@@ -5,6 +5,20 @@ ltsvp
 
 Print selected parts of LTSV from each FILE to standard output.
 
+```
+$ cat items.ltsv
+name:Apple	price:60	quantity:20
+name:Grapes	price:140	quantity:8
+name:Pineapple	price:400	quantity:2
+name:Orange	price:50	quantity:14
+
+$ cat items.ltsv | ltsvp -k price,quantity
+60	20
+140	8
+400	2
+50	14
+```
+
 Usage
 -----
 
