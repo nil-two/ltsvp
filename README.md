@@ -88,7 +88,7 @@ ltsvp --keys="foo\,bar,baz"
 Here is the syntax of headers in extended BNF.
 
 ```
-keys = key , { "," , key }
+keys = key , [ { "," , key } ]
 key  = { letter | "\," }
 ```
 
