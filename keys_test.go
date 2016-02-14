@@ -41,6 +41,11 @@ var ParseKeysListTests = []struct {
 	{`\\a\\,\\b\\`, []string{`\a\`, `\b\`}},
 	{`a\\b,c\\d\\e`, []string{`a\b`, `c\d\e`}},
 	{`a\\b,c\\d\\e,f\\g\\h\\i`, []string{`a\b`, `c\d\e`, `f\g\h\i`}},
+
+	// include backslash to be ignored
+	{`\n`, []string{`n`}},
+	{`1\t2\t3`, []string{`1t2t3`}},
+	{`\a\b\c\d\e`, []string{`abcde`}},
 }
 
 func TestParseKeysList(t *testing.T) {
