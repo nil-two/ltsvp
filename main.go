@@ -48,19 +48,19 @@ func printVersion() {
 	fmt.Fprintln(os.Stderr, version)
 }
 
-func do(l *LTSVScanner) error {
-	for l.Scan() {
-		fmt.Println(l.Text())
-	}
-	return l.Err()
-}
-
 func printErr(err interface{}) {
 	fmt.Fprintf(os.Stderr, "%s: %s\n", name, err)
 }
 
 func guideToHelp() {
 	fmt.Fprintf(os.Stderr, "Try '%s --help' for more information.\n", name)
+}
+
+func do(l *LTSVScanner) error {
+	for l.Scan() {
+		fmt.Println(l.Text())
+	}
+	return l.Err()
 }
 
 func main() {
