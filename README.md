@@ -85,14 +85,12 @@ ltsvp --keys="foo\,bar,baz"
 
 #### syntax of keys list
 
-Here is the syntax of headers in extended BNF.
+Here is the syntax of keys in extended BNF.
 
 ```
-keys = key , [ { "," , key } ]
-key  = { letter | "\," }
+keys = key , { "," , key } ;
+key  = { [ "\" ] , ? unicode character ? - "," | "\," } ;
 ```
-
-letter is a unicode character other than `,`.
 
 ### -D, --output-delimiter=STRING
 
