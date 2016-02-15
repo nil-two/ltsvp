@@ -79,7 +79,13 @@ func main() {
 		os.Exit(0)
 	}
 
-	if *list == "" {
+	specifiedList := false
+	flagset.Visit(func(f *pflag.Flag) {
+		if f.Name == "keys" {
+			specifiedList = true
+		}
+	})
+	if !specifiedList {
 		printErr("no specify LIST")
 		guideToHelp()
 		os.Exit(2)
