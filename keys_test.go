@@ -15,7 +15,6 @@ var ParseKeysListTests = []struct {
 	{`host,status,size`, []string{`host`, `status`, `size`}},
 
 	// include empty keys
-	{``, []string{``}},
 	{`,`, []string{``, ``}},
 	{`,,`, []string{``, ``, ``}},
 	{`,host`, []string{``, `host`}},
@@ -54,6 +53,10 @@ var ParseKeysListTests = []struct {
 	{`host\\,status\\\`, []string{`host\`, `status\`}},
 	{`host\\,status\\\\`, []string{`host\`, `status\\`}},
 	{`host\\,status\\\\\`, []string{`host\`, `status\\`}},
+
+	// empty list
+	{``, []string{}},
+	{`\`, []string{}},
 }
 
 func TestParseKeysList(t *testing.T) {
