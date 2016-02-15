@@ -21,6 +21,16 @@ var (
 	isVersion       = flagset.BoolP("version", "v", false, "")
 )
 
+func specifiedList() bool {
+	specifiedList := false
+	flagset.Visit(func(f *pflag.Flag) {
+		if f.Name == "keys" {
+			specifiedList = true
+		}
+	})
+	return specifiedList
+}
+
 func printUsage() {
 	fmt.Fprintf(os.Stderr, `
 Usage: %s OPTION... [FILE]...
@@ -79,13 +89,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	specifiedList := false
-	flagset.Visit(func(f *pflag.Flag) {
-		if f.Name == "keys" {
-			specifiedList = true
-		}
-	})
-	if !specifiedList {
+	if !specifiedList() {
 		printErr("no specify LIST")
 		guideToHelp()
 		os.Exit(2)
