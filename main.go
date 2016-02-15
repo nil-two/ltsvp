@@ -13,12 +13,12 @@ var (
 	name    = "ltsvp"
 	version = "0.4.2"
 
-	flag            = pflag.NewFlagSet(name, pflag.ContinueOnError)
-	list            = flag.StringP("keys", "k", "", "")
-	outputDelimiter = flag.StringP("output-delimiter", "D", "\t", "")
-	remainLTSV      = flag.BoolP("remain-ltsv", "r", false, "")
-	isHelp          = flag.BoolP("help", "h", false, "")
-	isVersion       = flag.BoolP("version", "v", false, "")
+	flagset         = pflag.NewFlagSet(name, pflag.ContinueOnError)
+	list            = flagset.StringP("keys", "k", "", "")
+	outputDelimiter = flagset.StringP("output-delimiter", "D", "\t", "")
+	remainLTSV      = flagset.BoolP("remain-ltsv", "r", false, "")
+	isHelp          = flagset.BoolP("help", "h", false, "")
+	isVersion       = flagset.BoolP("version", "v", false, "")
 )
 
 func printUsage() {
@@ -64,8 +64,8 @@ func do(l *LTSVScanner) error {
 }
 
 func main() {
-	flag.SetOutput(ioutil.Discard)
-	if err := flag.Parse(os.Args[1:]); err != nil {
+	flagset.SetOutput(ioutil.Discard)
+	if err := flagset.Parse(os.Args[1:]); err != nil {
 		printErr(err)
 		guideToHelp()
 		os.Exit(2)
@@ -86,7 +86,7 @@ func main() {
 	}
 	keys := ParseKeysList(*list)
 
-	r, err := argf.From(flag.Args())
+	r, err := argf.From(flagset.Args())
 	if err != nil {
 		printErr(err)
 		guideToHelp()
