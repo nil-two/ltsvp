@@ -1,3 +1,10 @@
+## v0.5.0 - 2016-02-15
+
+- Allow empty LIST like "".
+- Ignore backslash in front of charactor.
+  - later:   -k "\\time\status" #=> LIST = ["\timestatus"]
+  - earlier: -k "\\time\status" #=> LIST = ["\time\status"]
+
 ## v0.4.2 - 2016-02-01
 
 - Fix typo of short option for --output-delimiter.
