@@ -6,22 +6,22 @@ import (
 )
 
 var (
-	KEYS_LIST = regexp.MustCompile(`(?:[^,\\]|\\.)*`)
-	BACKSLASH = regexp.MustCompile(`\\(.)`)
-	TRAILING  = regexp.MustCompile(`\\+$`)
+	keysList  = regexp.MustCompile(`(?:[^,\\]|\\.)*`)
+	backslash = regexp.MustCompile(`\\(.)`)
+	trailing  = regexp.MustCompile(`\\+$`)
 )
 
 func ParseKeysList(list string) []string {
-	list = TRAILING.ReplaceAllStringFunc(list, func(s string) string {
+	list = trailing.ReplaceAllStringFunc(list, func(s string) string {
 		return strings.Repeat(`\\`, len(s)/2)
 	})
 	if list == "" {
 		return make([]string, 0)
 	}
 
-	keys := KEYS_LIST.FindAllString(list, -1)
+	keys := keysList.FindAllString(list, -1)
 	for i := 0; i < len(keys); i++ {
-		keys[i] = BACKSLASH.ReplaceAllString(keys[i], "$1")
+		keys[i] = backslash.ReplaceAllString(keys[i], "$1")
 	}
 	return keys
 }
