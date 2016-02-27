@@ -1,7 +1,7 @@
 ## v0.5.0 - 2016-02-15
 
 - Allow empty LIST like "".
-- Ignore backslash in front of charactor.
+- Ignore backslash in front of character.
   - later:   -k "\\time\status" #=> LIST = ["\timestatus"]
   - earlier: -k "\\time\status" #=> LIST = ["\time\status"]
 
