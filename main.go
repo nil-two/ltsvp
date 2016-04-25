@@ -70,11 +70,11 @@ func main() {
 		guideToHelp()
 		os.Exit(2)
 	}
-	switch {
-	case *isHelp:
+	if *isHelp {
 		printUsage()
 		os.Exit(0)
-	case *isVersion:
+	}
+	if *isVersion {
 		printVersion()
 		os.Exit(0)
 	}
