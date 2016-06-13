@@ -10,10 +10,10 @@ import (
 )
 
 var (
-	name    = "ltsvp"
+	cmdName = "ltsvp"
 	version = "0.5.0"
 
-	flagset         = pflag.NewFlagSet(name, pflag.ContinueOnError)
+	flagset         = pflag.NewFlagSet(cmdName, pflag.ContinueOnError)
 	list            = flagset.StringP("keys", "k", "", "")
 	outputDelimiter = flagset.StringP("output-delimiter", "D", "\t", "")
 	remainLTSV      = flagset.BoolP("remain-ltsv", "r", false, "")
@@ -41,7 +41,7 @@ Options:
 LIST is made up of keys separated by commas.
   host           # Select host
   host,time,ua   # Select host, time, and ua
-`[1:], name)
+`[1:], cmdName)
 }
 
 func printVersion() {
@@ -49,11 +49,11 @@ func printVersion() {
 }
 
 func printErr(err interface{}) {
-	fmt.Fprintf(os.Stderr, "%s: %s\n", name, err)
+	fmt.Fprintf(os.Stderr, "%s: %s\n", cmdName, err)
 }
 
 func guideToHelp() {
-	fmt.Fprintf(os.Stderr, "Try '%s --help' for more information.\n", name)
+	fmt.Fprintf(os.Stderr, "Try '%s --help' for more information.\n", cmdName)
 }
 
 func do(l *LTSVScanner) error {
