@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	cmdName = "ltsvp"
-	version = "0.5.0"
+	cmdName    = "ltsvp"
+	cmdVersion = "0.5.0"
 
 	flagset         = pflag.NewFlagSet(cmdName, pflag.ContinueOnError)
 	list            = flagset.StringP("keys", "k", "", "")
@@ -45,7 +45,7 @@ LIST is made up of keys separated by commas.
 }
 
 func printVersion() {
-	fmt.Fprintln(os.Stderr, version)
+	fmt.Fprintln(os.Stderr, cmdVersion)
 }
 
 func printErr(err interface{}) {
