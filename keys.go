@@ -1,27 +1,35 @@
 package main
 
-import (
-	"regexp"
-	"strings"
-)
-
-var (
-	keysList  = regexp.MustCompile(`(?:[^,\\]|\\.)*`)
-	backslash = regexp.MustCompile(`\\(.)`)
-	trailing  = regexp.MustCompile(`\\+$`)
-)
-
 func ParseKeysList(list string) []string {
-	list = trailing.ReplaceAllStringFunc(list, func(s string) string {
-		return strings.Repeat(`\\`, len(s)/2)
-	})
-	if list == "" {
-		return make([]string, 0)
+	if list == "" || list == "\\" {
+		return []string{}
 	}
 
-	keys := keysList.FindAllString(list, -1)
-	for i := 0; i < len(keys); i++ {
-		keys[i] = backslash.ReplaceAllString(keys[i], "$1")
+	var keys []string
+	var buf []rune
+	var isEscaping bool
+
+	for _, ch := range list {
+		if isEscaping {
+			buf = append(buf, ch)
+			isEscaping = false
+			continue
+		}
+
+		if ch == '\\' {
+			isEscaping = true
+			continue
+		}
+
+		if ch == ',' {
+			keys = append(keys, string(buf))
+			buf = make([]rune, 0, 8)
+			continue
+		}
+
+		buf = append(buf, ch)
 	}
+
+	keys = append(keys, string(buf))
 	return keys
 }
