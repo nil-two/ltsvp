@@ -1,8 +1,6 @@
 ltsvp
 =====
 
-[![Build Status](https://travis-ci.org/kusabashira/ltsvp.svg?branch=master)](https://travis-ci.org/kusabashira/ltsvp)
-
 Print selected parts of LTSV from each FILE to standard output.
 
 ```
@@ -47,12 +45,12 @@ Installation
 
 ### compiled binary
 
-See [releases](https://github.com/kusabashira/ltsvp/releases)
+See [releases](https://github.com/nil2nekoni/ltsvp/releases)
 
 ### go get
 
 ```
-go get github.com/kusabashira/ltsvp
+go get github.com/nil2nekoni/ltsvp
 ```
 
 Options
@@ -122,4 +120,4 @@ MIT License
 Author
 ------
 
-kusabashira <kusabashira227@gmail.com>
+nil2 <nil2@nil2.org>
