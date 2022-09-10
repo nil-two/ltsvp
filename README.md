@@ -45,12 +45,12 @@ Installation
 
 ### compiled binary
 
-See [releases](https://github.com/nil2nekoni/ltsvp/releases)
+See [releases](https://github.com/nil-two/ltsvp/releases)
 
 ### go get
 
 ```
-go get github.com/nil2nekoni/ltsvp
+go get github.com/nil-two/ltsvp
 ```
 
 Options
